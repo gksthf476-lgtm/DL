@@ -185,6 +185,54 @@ Baseline 모델의 Validation Accuracy가 목표 기준인 0.75보다 낮게 나
 | Exp5       | Bigger MLP + 낮은 Learning Rate + Dropout 조정 |              0.7664 |         0.7565 |            0.7672 |
 
 
+
+
+### 9.1 최종 코드
+
+```python 
+
+# 추가 개선 사항1. Bigger MLP + Lower Learning Rate + Lower Dropout
+
+import numpy as np
+import tensorflow as tf
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+
+input_dim = X_train_selected.shape[1]
+num_classes = len(np.unique(y_train))
+
+model_exp5 = Sequential()
+
+model_exp5.add(Dense(256, activation='relu', input_shape=(input_dim,)))
+model_exp5.add(BatchNormalization())
+model_exp5.add(Dropout(0.2))
+
+model_exp5.add(Dense(128, activation='relu'))
+model_exp5.add(BatchNormalization())
+model_exp5.add(Dropout(0.15))
+
+model_exp5.add(Dense(64, activation='relu'))
+model_exp5.add(BatchNormalization())
+model_exp5.add(Dropout(0.1))
+
+model_exp5.add(Dense(32, activation='relu'))
+model_exp5.add(Dropout(0.05))
+
+model_exp5.add(Dense(num_classes, activation='softmax'))
+
+model_exp5.compile(
+    optimizer=Adam(learning_rate=0.0005),
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+model_exp5.summary()
+
+```
+
 ## 10. 최종 모델
 
 최종 모델은 Exp5 모델로 선정하였다.
