@@ -195,6 +195,7 @@ Baseline 모델의 Validation Accuracy가 목표 기준인 0.75보다 낮게 나
 Exp5 모델은 Exp1의 확장된 MLP 구조를 유지하면서 learning rate를 낮추고 Dropout 비율을 조정한 모델이다.
 
 <최종 모델 구조>
+``` python
 Dense(256, activation='relu')
 BatchNormalization()
 Dropout(0.2)
@@ -211,13 +212,16 @@ Dense(32, activation='relu')
 Dropout(0.05)
 
 Dense(3, activation='softmax')
+```
 
 <학습 설정>
+```python
 optimizer = Adam(learning_rate=0.0005)
 loss = sparse_categorical_crossentropy
 metrics = accuracy
 epochs = 80
 batch_size = 64
+```
 
 + 과적합 방지를 위해 EarlyStopping을 적용하였고, validation loss가 정체될 경우 learning rate를 줄이기 위해 ReduceLROnPlateau를 사용하였다.
 
